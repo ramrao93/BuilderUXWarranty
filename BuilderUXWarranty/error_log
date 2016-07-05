@@ -1,0 +1,7 @@
+[24-Jun-2015 22:04:52 America/Chicago] PHP Parse error:  syntax error, unexpected end of file in /home/aviurba/public_html/_dev/wp-content/plugins/BuilderUX/elead.php on line 121
+[24-Jun-2015 22:05:53 America/Chicago] PHP Fatal error:  SoapClient::SoapClient(): 'location' and 'uri' options are required in nonWSDL mode in /home/aviurba/public_html/_dev/wp-content/plugins/BuilderUX/elead.php on line 8
+[24-Jun-2015 22:05:53 America/Chicago] PHP Fatal error:  Uncaught SoapFault exception: [Client] SoapClient::SoapClient(): 'location' and 'uri' options are required in nonWSDL mode in /home/aviurba/public_html/_dev/wp-content/plugins/BuilderUX/elead.php:8
+Stack trace:
+#0 /home/aviurba/public_html/_dev/wp-content/plugins/BuilderUX/elead.php(8): SoapClient->SoapClient(NULL)
+#1 {main}
+  thrown in /home/aviurba/public_html/_dev/wp-content/plugins/BuilderUX/elead.php on line 8
