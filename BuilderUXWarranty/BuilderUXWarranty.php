@@ -7,9 +7,10 @@ Plugin Name: BuilderUXWarranty
 Plugin URI: 
 Description:
 Version: 1
-Author URI: fritz barry hoy
+Author URI: BuilderUXWarranty
+GitHub Plugin URI: https://github.com/ramrao93/BuilderUXWarranty/<repo>. 
 */
- # ============= add builder user ===================
+# ============= add builder user =================== 
 
 $user_id = 0; 
 function install_warranty_request_page()
@@ -17,10 +18,9 @@ function install_warranty_request_page()
   global $user_id;
   $page = get_page_by_title('Warranty Request');
 
- if ( ! $page ) {
+ if (! $page) {
 
      $post = array(
-
             'comment_status' => 'closed',
             'ping_status' =>  'closed' ,
             'post_author' => $user_id,
@@ -30,52 +30,34 @@ function install_warranty_request_page()
             'post_title' => 'Builderux Warranty Request',
             'post_content' => '[builderux_warranty_request]',
             'post_type' => 'page',
-
       ); 
-       $newvalue = wp_insert_post( $post, false );
+      $newvalue = wp_insert_post( $post, false );
       update_option( 'builderux_warranty_request', $newvalue );
-
     }else{
-
      $my_post = array(
-
          'ID'           => $page->ID,
          'post_content' => '[builderux_warranty_request]',
-
      );
-
-    wp_update_post( $my_post );   
-
-     }
- }
-
+    wp_update_post($my_post);
+   }
+}
 function install_builder_user(){
-
  global $user_id;
-
  $user = get_user_by( 'user_login', 'BuilderUXWarranty' );
-
  if ( ! $user ) {
-
      $userdata = array(
-
             'user_login' => 'BuilderUXWarranty',
             'user_nicename' =>  'BuilderUXWarranty' ,
             'display_name' => 'BuilderUXWarranty'
-
       ); 
      $user_id = $newvalue = wp_insert_user( $userdata );
-
     }else{
       $user_id = $user->ID;
-
-    $userdata = array(
-
+      $userdata = array(
          'ID'            => $user->ID,
          'user_login'    => 'builderux',
          'user_nicename' =>  'builderux',
          'display_name'  => 'builderux'
-
     );
     wp_update_user( $userdata ); 
   }
@@ -106,65 +88,35 @@ function BuilderUXinHouse_activate() {
                                date_last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                 PRIMARY KEY  (templateid) )';
                  $sql2 = 'CREATE TABLE ' . $table_namedata . '( 
-
                                 fieldname varchar(255) not null,
-
                                 leadname varchar(255),
-
                                 labelname varchar(255),
-
                                 date_last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
                                 PRIMARY KEY  (fieldname) )';
-
                 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
                 dbDelta($sql);
-
                 dbDelta($sql2);
-
-                $wpdb->query($sqlinsert);            
-
-                add_option('BuilderUX_database_version','1.0');
-
-        } else {
-
-            // check if fields are present
-
-           try {
-
                 $wpdb->query($sqlinsert);
-
+				add_option('BuilderUX_database_version','1.0');
+        } else {
+            // check if fields are present
+           try {
+                $wpdb->query($sqlinsert);
            } catch(Execption $e){ }
-
        }
-
 }
 function BuilderUXinHouse_deactivate() {
-
  // add options, build db tables, etc
-
-
 }
-
 register_activation_hook(__FILE__, 'install_builder_user');
-
-register_activation_hook(__FILE__, 'install_warranty_request_page'); 
-
+register_activation_hook(__FILE__, 'install_warranty_request_page');
 add_shortcode( 'builderux_warranty_request', 'builderux_warranty_request' );
-
 register_activation_hook(__FILE__,"BuilderUXinHouse_activate");
-
 register_deactivation_hook(__FILE__,"BuilderUXinHouse_deactivate");
-
 add_action('init', 'registerInHouse_my_script');
-
 add_action('wp_footer', 'printInHouse_my_script',100);
-
 add_action( 'wp_enqueue_scripts', 'printInHouse_my_css' );
-
 function registerInHouse_my_script() {
-
    wp_register_script('my-script', 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js', array('jquery'), '1.0', true);
    wp_register_script("jquery-ui","https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js",array("jquery"),'1.11.4',true);
    wp_register_script( 'validate-script', plugins_url( '/js/jquery.validate.min.js', __FILE__ ),'','','true' );
@@ -172,23 +124,18 @@ function registerInHouse_my_script() {
    wp_localize_script( 'builder-ux', 'MyAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 }
 function printInHouse_my_css(){
-
     global $add_my_css;
     wp_register_style('custom-css', plugins_url( '/css/BuilderUXWarranty.css', __FILE__ ) );  
     wp_enqueue_style('custom-css');
     wp_register_style('jquery-ui-css', "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" );  
     wp_enqueue_style('jquery-ui-css');
-
 }
 function printInHouse_my_script() {
-
     global $add_my_script;
     if ( ! $add_my_script )
         return;
    if ( ! wp_script_is( 'jquery' ) ) {
-
       wp_print_scripts('my-script');
-
    }
     wp_print_scripts('validate-script');
     wp_print_scripts('jquery-ui');
@@ -198,11 +145,8 @@ function builderuxInHouse_css_and_js() {
 wp_register_style('builderuxInHouse_css_and_js', plugins_url('css/bootstrap.min.css',__FILE__ ));
 wp_enqueue_style('builderuxInHouse_css_and_js');
 }
-
-if (isset($_GET['page']) && ($_GET['page'] == 'BuilderUXinHouse-plugin')) { 
-
+if (isset($_GET['page']) && ($_GET['page'] == 'BuilderUXinHouse-plugin')) {
         // if we are on the plugin page, enable the script
-
     add_action('admin_print_styles', 'builderuxInHouse_css_and_js');
 }
 function BuilderUXinHouse_plugin_menu()
@@ -260,25 +204,18 @@ function BuilderUXinHouse_option_page(){
     } /** -- end of if post **/
 
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'GET'){
-
       if(isset($_GET["delete"]))  {
-
         $delete = $_GET["delete"];   
-
          if($delete){		 
-
           $id = $_GET["id"];     
           $wpdb->delete( $table_name, array( 'templateid' => $id ), array( '%s' ) );
-
          } 
       }
-
       if(isset($_GET["fid"])) {
         $fid = $_GET["fid"]; 
         if($fid)
             $wpdb->delete( $table_namedata, array( 'fieldname' => $fid ), array( '%s' ) );
       } 
-
       if(isset($_GET["id"])) {
         $id = $_GET["id"];
         if($id && !$delete) {
@@ -295,7 +232,6 @@ function BuilderUXinHouse_option_page(){
         }
       }   
      } /** end of if get **/
-
   ?>
     <div class="wrap">
     <?php screen_icon(); ?>
